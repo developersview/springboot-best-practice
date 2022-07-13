@@ -8,16 +8,16 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "Employees")
+@Table(name = "employees")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column(name = "FirstName", nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
-    @Column(name = "LastName", nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "EmailID", nullable = false)
+    @Column(name = "emailid", nullable = false)
     private String emailID;
 
     public Employee() {
