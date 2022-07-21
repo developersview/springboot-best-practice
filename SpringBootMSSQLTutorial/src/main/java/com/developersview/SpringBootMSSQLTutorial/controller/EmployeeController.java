@@ -5,9 +5,11 @@ import javax.validation.Valid;
 import com.developersview.SpringBootMSSQLTutorial.exception.ResourceNotFoundException;
 import com.developersview.SpringBootMSSQLTutorial.model.Employee;
 import com.developersview.SpringBootMSSQLTutorial.repository.EmployeeRepository;
+import com.developersview.SpringBootMSSQLTutorial.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,22 +19,31 @@ import java.util.*;
  * @author pranoy.chakraborty
  * @Date 13/07/22
  */
-@RestController
+@Controller
 @RequestMapping("/api/v1")
 public class EmployeeController {
-    @Autowired
-    public EmployeeRepository employeeRepository;
 
-    @GetMapping("/employees")
+    @Autowired
+    public EmployeeService employeeService;
+
+    @RequestMapping(value = "/employeesview")
+    public String employeesview(Model model) {
+        model.addAttribute("employees", employeeService.findAll());
+        return "employeesview";
+    }
+
+    @RequestMapping(value = "/employee", method = RequestMethod.POST)
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+        employeeService.saveEmployee(employee);
+        return ResponseEntity.ok().body(employee);
+    }
+
+    /*@GetMapping("/employees")
     public List<Employee> getAllEmployee() {
         return employeeRepository.findAll();
     }
 
-    @RequestMapping(value = "/employeesview", method = RequestMethod.GET)
-    public String employeesview(Model model) {
-        model.addAttribute("employees", employeeRepository.findAll());
-        return "employeesview";
-    }
+   
 
     @GetMapping("/employee/{id}")
     public ResponseEntity<Employee> getEmployeeByID(@PathVariable(value = "id") long id) throws ResourceNotFoundException {
@@ -41,10 +52,7 @@ public class EmployeeController {
         return ResponseEntity.ok().body(employee);
     }
 
-    @PostMapping("/employee")
-    public Employee createEmployee(@Valid @RequestBody Employee employee) {
-        return employeeRepository.save(employee);
-    }
+
 
     @PutMapping("/employees/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Long employeeId,
@@ -69,5 +77,5 @@ public class EmployeeController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
-    }
+    }*/
 }
